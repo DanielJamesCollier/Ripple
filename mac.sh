@@ -2,7 +2,7 @@
 
 # Compile main.c using clang
 echo "Compiling main.c..."
-clang main.c cd.c -o ripple
+clang main.c cd.c dir.c -o ripple
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then

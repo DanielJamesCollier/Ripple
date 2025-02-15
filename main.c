@@ -16,6 +16,7 @@
 #endif
 
 #include "cd.h"
+#include "dir.h"
 
 #define BLUE_BG "\033[44m"
 #define RESET "\033[0m"
@@ -26,10 +27,10 @@
 
 enum CommandType {
   CMD_CD,
+  CMD_DIR,
   CMD_EXIT,
   CMD_CMD,
 };
-
 
 void cleanup(int signum) {
   (void)signum;
@@ -42,6 +43,8 @@ static enum CommandType parse_command(const char *input, char *args) {
   if (strncmp(input, "cd", 2) == 0) {
     strcpy(args, input + 2);
     return CMD_CD;
+  } else if (strcmp(input, "dir") == 0) {
+    return CMD_DIR;
   } else if (strcmp(input, "exit") == 0) {
     return CMD_EXIT;
   }
@@ -115,8 +118,9 @@ static void handle_terminal() {
     enum CommandType cmd = parse_command(input, args);
     switch(cmd) {
       case CMD_CD:   { cd(args); } break;
+      case CMD_DIR:  { dir(); } break;
       case CMD_EXIT: { exit(0); } break;
-      case CMD_CMD:  { printf("todo cmd\n"); } break;
+      case CMD_CMD:  { printf("todo cmd\n\n"); } break;
     }
   }
 }
