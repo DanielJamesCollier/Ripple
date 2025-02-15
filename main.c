@@ -6,16 +6,13 @@
 
 #ifdef _WIN32
 #include <Windows.h>
-#define GET_CWD _getcwd
-#define CHDIR _chdir
 #else
 #include <unistd.h>
 #include <sys/ioctl.h>
-#define GET_CWD getcwd
-#define CHDIR chdir
 #endif
 
 #include "defines.h"
+#include "common.h"
 #include "cd.h"
 #include "dir.h"
 #include "splash.h"
@@ -57,11 +54,9 @@ static void handle_terminal() {
   char input[256];
 
   while (1) {
-    if (GET_CWD(cwd, sizeof(cwd)) != NULL) {
+    if (get_cwd(cwd, sizeof(cwd)) == 0) {
       printf("\033[%d;1H%s\n> ", 999, cwd);
       fflush(stdout);
-    } else {
-      perror("getcwd() error");
     }
 
     if (fgets(input, sizeof(input), stdin) == NULL) {
@@ -90,7 +85,6 @@ static void enable_vt_codes() {
   GetConsoleMode(hOut, &dwMode);
   SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
 #endif
-  // Not on by default on Mac and Linux.
 }
 
 int main(void) {

@@ -9,18 +9,16 @@
 #include <unistd.h>
 #endif
 
+#include "common.h"
+
 void cd(const char *str) {
   assert(str);
+
   while (*str == ' ') ++str;
 
-#ifdef _WIN32
-  if (_chdir(str) != 0) {
+  if (change_directory(str) != 0) {
     printf("cd failed. Directory not found.\n");
   }
-#else
-  if (chdir(str) != 0) {
-    printf("cd failed. Directory not found.\n");
-  }
+
   putchar('\n');
-#endif
 }

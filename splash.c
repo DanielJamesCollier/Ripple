@@ -2,6 +2,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
+
+#include "defines.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -10,7 +13,6 @@
 #include <unistd.h>
 #endif
 
-#include "defines.h"
 
 static void ripple_sleep(int ms) {
 #if defined(_WIN32)
@@ -20,8 +22,10 @@ static void ripple_sleep(int ms) {
 #endif
 }
 
-
 static void get_terminal_size(int* rows, int* cols) {
+  assert(rows);
+  assert(cols);
+
 #ifdef _WIN32
   CONSOLE_SCREEN_BUFFER_INFO csbi;
   if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
@@ -40,8 +44,9 @@ static void get_terminal_size(int* rows, int* cols) {
 #endif
 }
 
-
 static void center_text(const char* text) {
+  assert(text);
+
   int rows, cols;
   get_terminal_size(&rows, &cols);
 
@@ -56,7 +61,6 @@ static void center_text(const char* text) {
     printf(" ");
   }
 }
-
 
 void splash() {
   printf(HIDE_CURSOR);
