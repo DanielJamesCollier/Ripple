@@ -15,17 +15,37 @@
 #define CHDIR chdir
 #endif
 
+#include "cd.h"
+
 #define BLUE_BG "\033[44m"
 #define RESET "\033[0m"
 #define HIDE_CURSOR "\033[?25l"
 #define SHOW_CURSOR "\033[?25h"
 #define CLEAR_SCREEN "\033[H\033[2J\033[3J"
+#define MAX_ARGS 1024
+
+enum CommandType {
+  CMD_CD,
+  CMD_EXIT,
+  CMD_CMD,
+};
+
 
 void cleanup(int signum) {
   (void)signum;
   printf(CLEAR_SCREEN SHOW_CURSOR "\n");
   fflush(stdout);
   exit(0);
+}
+
+static enum CommandType parse_command(const char *input, char *args) {
+  if (strncmp(input, "cd", 2) == 0) {
+    strcpy(args, input + 2);
+    return CMD_CD;
+  } else if (strcmp(input, "exit") == 0) {
+    return CMD_EXIT;
+  }
+  return CMD_CMD;
 }
 
 static void ripple_sleep(int ms) {
@@ -91,15 +111,12 @@ static void handle_terminal() {
 
     input[strcspn(input, "\n")] = 0;
 
-    if (strncmp(input, "cd ", 3) == 0) {
-      char* path = input + 3;
-      if (CHDIR(path) != 0) {
-        perror("cd failed");
-       }
-    } else if (strcmp(input, "exit") == 0) {
-      break;
-    } else {
-      printf("Command not found: %s\n", input);
+    char args[1024];
+    enum CommandType cmd = parse_command(input, args);
+    switch(cmd) {
+      case CMD_CD:   { cd(args); } break;
+      case CMD_EXIT: { exit(0); } break;
+      case CMD_CMD:  { printf("todo cmd\n"); } break;
     }
   }
 }
