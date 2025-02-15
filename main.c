@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include <assert.h>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -35,6 +36,9 @@ void cleanup(int signum) {
 }
 
 static enum CommandType parse_command(const char *input, char *args) {
+  assert(input);
+  assert(args);
+  
   if (strncmp(input, "cd", 2) == 0) {
     strcpy(args, input + 2);
     return CMD_CD;
@@ -70,9 +74,9 @@ static void handle_terminal() {
     enum CommandType cmd = parse_command(input, args);
     switch(cmd) {
       case CMD_CD:     { cd(args); } break;
-      case CMD_DIR:    { dir(); } break;
+      case CMD_DIR:    { dir();    } break;
       case CMD_SPLASH: { splash(); } break;
-      case CMD_EXIT:   { exit(0); } break;
+      case CMD_EXIT:   { exit(0);  } break;
       case CMD_CMD:    { printf("todo cmd\n\n"); } break;
     }
   }
