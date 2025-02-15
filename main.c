@@ -111,6 +111,7 @@ static void enable_vt_codes() {
   GetConsoleMode(hOut, &dwMode);
   SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
 #endif
+  // Not on by default on Mac and Linux.
 }
 
 int main(void) {
