@@ -81,4 +81,6 @@ void splash() {
   printf(CLEAR_SCREEN);
   printf(SHOW_CURSOR);
   setvbuf(stdout, NULL, _IOFBF, 0);
+
+  printf("\033[%d;1H%s\n", 999, "Ripple v0.1\nby Daniel Collier\n");
 }
