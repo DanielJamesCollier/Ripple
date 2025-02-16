@@ -142,6 +142,9 @@ int main(void) {
   signal(SIGINT, cleanup);
   enable_vt_codes();
   splash();
+
+  printf("\033[%d;1H%s\n", 999, "Ripple v0.1\nby Daniel Collier\n");
+
   handle_terminal();
   return 0;
 }
