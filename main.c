@@ -19,6 +19,7 @@
 #include "new.h"
 #include "del.h"
 #include "mkdir.h"
+#include "gui.h"
 
 #define MAX_ARGS 1024
 
@@ -31,6 +32,8 @@ enum CommandType {
   CMD_NEW,
   CMD_MKDIR,
   CMD_DEL,
+  CMD_GUI,
+  CMD_EMPTY,
   CMD_ERROR,
 };
 
@@ -47,6 +50,10 @@ static enum CommandType parse_command(const char *input, char *args, int args_si
 
   while (*input == ' ') {
     ++input;
+  }
+
+  if (*input == '\0') {
+    return CMD_EMPTY; 
   }
 
   size_t input_len = strlen(input);
@@ -74,20 +81,28 @@ static enum CommandType parse_command(const char *input, char *args, int args_si
   } else if (strncmp(input, "del", 3) == 0) {
     strcpy(args, input + 4);
     return CMD_DEL;
+  } else if (strncmp(input, "gui", 3) == 0) {
+    return CMD_GUI;
   }
   return CMD_CMD;
 }
 
-// Function to display cwd and handle user input
 static void handle_terminal() {
   char cwd[1024];
   char input[256];
+  int print_cwd = 1;
 
   while (1) {
-    if (get_cwd(cwd, sizeof(cwd)) == 0) {
-      printf("\033[%d;1H%s\n> ", 999, cwd);
-      fflush(stdout);
+    if (print_cwd == 1) {
+      if (get_cwd(cwd, sizeof(cwd)) == 0) {
+        printf("\033[%d;1H%s\n", 999, cwd);
+        fflush(stdout);
+      }
+    } else {
+      print_cwd = 1;
     }
+    printf("> ");
+    fflush(stdout);
 
     if (fgets(input, sizeof(input), stdin) == NULL) {
       printf("\n");
@@ -105,6 +120,8 @@ static void handle_terminal() {
       case CMD_MKDIR:  { mkdir_cmd(args);        } break;
       case CMD_DEL:    { del(args);              } break;
       case CMD_SPLASH: { splash();               } break;
+      case CMD_GUI:    { gui();                  } break;
+      case CMD_EMPTY:  { print_cwd = 0;          } break;
       case CMD_EXIT:   { exit(0);                } break;
       case CMD_CMD:    { printf("todo cmd\n\n"); } break;
       case CMD_ERROR:  { continue;               } break;
