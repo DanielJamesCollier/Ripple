@@ -24,9 +24,9 @@ static void mkdir_windows(const char *dir) {
   } else {
     DWORD error = GetLastError();   
     if (result == ERROR_ALREADY_EXISTS) {
-      fprintf(stderr, "%s already exists.\n\n", dir);
+      fprintf(stderr, "Error: %s already exists.\n\n", dir);
     } else if (error == ERROR_PATH_NOT_FOUND) {
-      fprintf(stderr, "Intermediate folders not found.\n\n", dir);
+      fprintf(stderr, "Error: Intermediate folders not found.\n\n", dir);
     }  
   } 
 }
@@ -42,7 +42,7 @@ static void mkdir_apple(const char *dir) {
     printf("Folder created.\n\n");
   } else {
     if (errno == EEXIST) {
-      fprintf(stderr, "%s already exists.\n\n", dir);
+      fprintf(stderr, "Error: %s already exists.\n\n", dir);
     } else {
       fprintf(stderr, "Error creating folder.\n\n");
     }
