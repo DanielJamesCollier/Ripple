@@ -53,6 +53,10 @@ static void mkdir_apple(const char *dir) {
 void mkdir_cmd(const char *dir) {
   assert(dir);
 
+  while (*dir == ' ') {
+    ++dir;
+  }
+
 #if defined(_WIN32)
   mkdir_windows(dir);
 #endif
