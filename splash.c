@@ -13,6 +13,7 @@
 #include <unistd.h>
 #endif
 
+#include "defines.h"
 
 static void ripple_sleep(int ms) {
 #if defined(_WIN32)
@@ -67,13 +68,13 @@ void splash() {
   printf(HIDE_CURSOR);
 
   for (int i = 0; i < 3; i++) {
-    center_text("Ripple Terminal");
-    printf("Ripple Terminal" BLUE_BG " " RESET);
+    center_text(PRODUCT_NAME);
+    printf(PRODUCT_NAME BLUE_BG " " RESET);
     fflush(stdout);
     ripple_sleep(700);
 
-    center_text("Ripple Terminal");
-    printf("Ripple Terminal ");
+    center_text(PRODUCT_NAME);
+    printf(PRODUCT_NAME);
     fflush(stdout);
     ripple_sleep(400);
   }

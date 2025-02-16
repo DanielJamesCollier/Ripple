@@ -20,6 +20,7 @@
 #include "del.h"
 #include "mkdir.h"
 #include "gui.h"
+#include "clear.h"
 
 #define MAX_ARGS 1024
 
@@ -33,6 +34,7 @@ enum CommandType {
   CMD_MKDIR,
   CMD_DEL,
   CMD_GUI,
+  CMD_CLEAR,
   CMD_EMPTY,
   CMD_ERROR,
 };
@@ -81,8 +83,12 @@ static enum CommandType parse_command(const char *input, char *args, int args_si
   } else if (strncmp(input, "del", 3) == 0) {
     strcpy(args, input + 4);
     return CMD_DEL;
-  } else if (strncmp(input, "gui", 3) == 0) {
+  } else if (strcmp(input, "gui") == 0) {
     return CMD_GUI;
+  } else if (strcmp(input, "clear") == 0) {
+    return CMD_CLEAR;
+  } else if (strcmp(input, "cls") == 0)  {
+    return CMD_CLEAR;
   }
   return CMD_CMD;
 }
@@ -122,6 +128,7 @@ static void handle_terminal() {
       case CMD_SPLASH: { splash();               } break;
       case CMD_GUI:    { gui();                  } break;
       case CMD_EMPTY:  { print_cwd = 0;          } break;
+      case CMD_CLEAR:  { clear();                } break;
       case CMD_EXIT:   { exit(0);                } break;
       case CMD_CMD:    { printf("todo cmd\n\n"); } break;
       case CMD_ERROR:  { continue;               } break;
@@ -143,7 +150,7 @@ int main(void) {
   enable_vt_codes();
   splash();
 
-  printf("\033[%d;1H%s\n", 999, "Ripple v0.1\nby Daniel Collier\n");
+  printf("\033[%d;1H%s\n", 999, PRODUCT_NAME " " VERSION "\nby Daniel Collier\n");
 
   handle_terminal();
   return 0;
