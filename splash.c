@@ -63,6 +63,7 @@ static void center_text(const char* text) {
 }
 
 void splash() {
+  setvbuf(stdout, NULL, _IOFBF, 16384);
   printf(HIDE_CURSOR);
 
   for (int i = 0; i < 3; i++) {
@@ -79,4 +80,5 @@ void splash() {
 
   printf(CLEAR_SCREEN);
   printf(SHOW_CURSOR);
+  setvbuf(stdout, NULL, _IOFBF, 0);
 }

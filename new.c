@@ -3,41 +3,41 @@
 #include <stdio.h>
 #include <assert.h>
 
-// When no filename is provided to the 
-// new command, we will use the default name.
+// When no file name is provided to the 
+// "new" command, we will use the default name.
 static const char *default_name = "file.txt";
 
-static void new_internal(const char *filename) {
-  assert(filename);
+static void new_internal(const char *file_name) {
+  assert(file_name);
 
-  FILE *file = fopen(filename, "r");
+  FILE *file = fopen(file_name, "r");
   if (file) {
     fclose(file);
-    fprintf(stderr, "Error: File %s already exists.\n\n", filename);
+    fprintf(stderr, "Error: File %s already exists.\n\n", file_name);
     return;
   }
 
-  file = fopen(filename, "w");
+  file = fopen(file_name, "w");
   if (!file) {
-    fprintf(stderr, "Error: Could not create %s.\n\n", filename);
+    fprintf(stderr, "Error: Could not create %s.\n\n", file_name);
     return;
   }
 
-  printf("File %s was created.\n\n", filename);
+  printf("File %s was created.\n\n", file_name);
   fclose(file);
   return;
 }
 
-void new(const char *filename) {
-  assert(filename);
+void new(const char *file_name) {
+  assert(file_name);
 
-  while (*filename == ' ') {
-    ++filename; 
+  while (*file_name == ' ') {
+    ++file_name; 
   }
 
-  if (*filename == '\0') {
+  if (*file_name == '\0') {
     new_internal(default_name);
   } else {
-    new_internal(filename);
+    new_internal(file_name);
   }
 }

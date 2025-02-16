@@ -2,7 +2,7 @@
 
 # Compile main.c using clang
 echo "Compiling main.c..."
-clang --std=c17 main.c cd.c dir.c splash.c common.c new.c -o ripple
+clang --std=c17 main.c cd.c dir.c splash.c common.c new.c del.c -o ripple
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then

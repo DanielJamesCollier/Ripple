@@ -17,6 +17,7 @@
 #include "dir.h"
 #include "splash.h"
 #include "new.h"
+#include "del.h"
 
 #define MAX_ARGS 1024
 
@@ -27,6 +28,7 @@ enum CommandType {
   CMD_EXIT,
   CMD_CMD,
   CMD_NEW,
+  CMD_DEL,
   CMD_ERROR,
 };
 
@@ -60,6 +62,9 @@ static enum CommandType parse_command(const char *input, char *args, int args_si
   } else if (strncmp(input, "new", 3) == 0) {
     strcpy(args, input + 4);
     return CMD_NEW;
+  } else if (strncmp(input, "del", 3) == 0) {
+    strcpy(args, input + 4);
+    return CMD_DEL;
   }
   return CMD_CMD;
 }
@@ -88,6 +93,7 @@ static void handle_terminal() {
       case CMD_CD:     { cd(args); } break;
       case CMD_DIR:    { dir();    } break;
       case CMD_NEW:    { new(args);} break;
+      case CMD_DEL:    { del(args);} break;
       case CMD_SPLASH: { splash(); } break;
       case CMD_EXIT:   { exit(0);  } break;
       case CMD_CMD:    { printf("todo cmd\n\n"); } break;
@@ -108,8 +114,6 @@ static void enable_vt_codes() {
 int main(void) {
   signal(SIGINT, cleanup);
   enable_vt_codes();
-  setvbuf(stdout, NULL, _IOFBF, 16384);
-
   splash();
   handle_terminal();
   return 0;
