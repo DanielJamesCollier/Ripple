@@ -68,7 +68,9 @@ static enum CommandType parse_command(const char *input, char *args, int args_si
   if (strncmp(input, "cd", 2) == 0) {
     strcpy(args, input + 2);
     return CMD_CD;
-  } else if (strcmp(input, "dir") == 0) {
+  } else if (strncmp(input, "dir", 3) == 0) {
+    return CMD_DIR;
+  } else if (strncmp(input, "ls", 2) == 0) {
     return CMD_DIR;
   } else if (strcmp(input, "splash") == 0) {
     return CMD_SPLASH;
@@ -83,11 +85,11 @@ static enum CommandType parse_command(const char *input, char *args, int args_si
   } else if (strncmp(input, "del", 3) == 0) {
     strcpy(args, input + 4);
     return CMD_DEL;
-  } else if (strcmp(input, "gui") == 0) {
+  } else if (strncmp(input, "gui", 3) == 0) {
     return CMD_GUI;
-  } else if (strcmp(input, "clear") == 0) {
+  } else if (strncmp(input, "clear", 5) == 0) {
     return CMD_CLEAR;
-  } else if (strcmp(input, "cls") == 0)  {
+  } else if (strncmp(input, "cls", 3) == 0)  {
     return CMD_CLEAR;
   }
   return CMD_CMD;
@@ -129,7 +131,7 @@ static void handle_terminal() {
       case CMD_GUI:    { gui();                  } break;
       case CMD_EMPTY:  { print_cwd = 0;          } break;
       case CMD_CLEAR:  { clear();                } break;
-      case CMD_EXIT:   { exit(0);                } break;
+      case CMD_EXIT:   { putchar('\n'); exit(0); } break;
       case CMD_CMD:    { printf("todo cmd\n\n"); } break;
       case CMD_ERROR:  { continue;               } break;
     }
