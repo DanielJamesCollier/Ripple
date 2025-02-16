@@ -27,4 +27,3 @@ int get_cwd(char *cwd, int cwd_length) {
   return getcwd(cwd, cwd_length) ? 0 : -1;
 #endif
 }
-

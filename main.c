@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,6 +16,7 @@
 #include "cd.h"
 #include "dir.h"
 #include "splash.h"
+#include "new.h"
 
 #define MAX_ARGS 1024
 
@@ -26,6 +26,8 @@ enum CommandType {
   CMD_SPLASH,
   CMD_EXIT,
   CMD_CMD,
+  CMD_NEW,
+  CMD_ERROR,
 };
 
 void cleanup(int signum) {
@@ -35,9 +37,16 @@ void cleanup(int signum) {
   exit(0);
 }
 
-static enum CommandType parse_command(const char *input, char *args) {
+static enum CommandType parse_command(const char *input, char *args, int args_size) {
   assert(input);
   assert(args);
+
+  size_t input_len = strlen(input);
+
+  if (input_len > args_size) {
+    fprintf(stderr, "Error. Input too long.");
+    return CMD_ERROR;
+  }
   
   if (strncmp(input, "cd", 2) == 0) {
     strcpy(args, input + 2);
@@ -48,6 +57,9 @@ static enum CommandType parse_command(const char *input, char *args) {
     return CMD_SPLASH;
   } else if (strcmp(input, "exit") == 0) {
     return CMD_EXIT;
+  } else if (strncmp(input, "new", 3) == 0) {
+    strcpy(args, input + 4);
+    return CMD_NEW;
   }
   return CMD_CMD;
 }
@@ -71,13 +83,15 @@ static void handle_terminal() {
     input[strcspn(input, "\n")] = 0;
 
     char args[1024];
-    enum CommandType cmd = parse_command(input, args);
+    enum CommandType cmd = parse_command(input, args, sizeof(args));
     switch(cmd) {
       case CMD_CD:     { cd(args); } break;
       case CMD_DIR:    { dir();    } break;
+      case CMD_NEW:    { new(args);} break;
       case CMD_SPLASH: { splash(); } break;
       case CMD_EXIT:   { exit(0);  } break;
       case CMD_CMD:    { printf("todo cmd\n\n"); } break;
+      case CMD_ERROR:  { continue; } break;
     }
   }
 }
