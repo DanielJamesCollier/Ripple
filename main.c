@@ -45,6 +45,10 @@ static enum CommandType parse_command(const char *input, char *args, int args_si
   assert(input);
   assert(args);
 
+  while (*input == ' ') {
+    ++input;
+  }
+
   size_t input_len = strlen(input);
 
   if (input_len > args_size) {
