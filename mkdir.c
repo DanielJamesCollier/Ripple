@@ -19,12 +19,16 @@ static void mkdir_windows(const char *dir) {
 
   BOOL result = CreateDirectory(dir, NULL); 
 
-  if (result == ERROR_ALREADY_EXISTS) {
-    fprintf(stderr, "%s already exists.\n\n", dir);
-  } else if (result == ERROR_PATH_NOT_FOUND) {
-    fprintf(stderr, "Intermediate folders not found.\n\n", dir);
-  }
-  printf("Folder created.\n\n");
+  if (result != 0) {
+    printf("Folder created.\n\n");
+  } else {
+    DWORD error = GetLastError();   
+    if (result == ERROR_ALREADY_EXISTS) {
+      fprintf(stderr, "%s already exists.\n\n", dir);
+    } else if (error == ERROR_PATH_NOT_FOUND) {
+      fprintf(stderr, "Intermediate folders not found.\n\n", dir);
+    }  
+  } 
 }
 #endif // _WIN32
 
