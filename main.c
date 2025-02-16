@@ -95,15 +95,15 @@ static void handle_terminal() {
     char args[1024];
     enum CommandType cmd = parse_command(input, args, sizeof(args));
     switch(cmd) {
-      case CMD_CD:     { cd(args);   } break;
-      case CMD_DIR:    { dir();      } break;
-      case CMD_NEW:    { new(args);  } break;
-      case CMD_MKDIR:  { mkdir_cmd(args);} break;
-      case CMD_DEL:    { del(args);  } break;
-      case CMD_SPLASH: { splash();   } break;
-      case CMD_EXIT:   { exit(0);    } break;
-      case CMD_ERROR:  { continue;   } break;
+      case CMD_CD:     { cd(args);               } break;
+      case CMD_DIR:    { dir();                  } break;
+      case CMD_NEW:    { new(args);              } break;
+      case CMD_MKDIR:  { mkdir_cmd(args);        } break;
+      case CMD_DEL:    { del(args);              } break;
+      case CMD_SPLASH: { splash();               } break;
+      case CMD_EXIT:   { exit(0);                } break;
       case CMD_CMD:    { printf("todo cmd\n\n"); } break;
+      case CMD_ERROR:  { continue;               } break;
     }
   }
 }
