@@ -26,7 +26,7 @@ static void mkdir_windows(const char *dir) {
     if (result == ERROR_ALREADY_EXISTS) {
       fprintf(stderr, "Error: %s already exists.\n\n", dir);
     } else if (error == ERROR_PATH_NOT_FOUND) {
-      fprintf(stderr, "Error: Intermediate folders not found.\n\n", dir);
+      fprintf(stderr, "Error: Intermediate folders not found.\n\n");
     }  
   } 
 }

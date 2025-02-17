@@ -6,6 +6,7 @@
 #if defined(_WIN32)
 #include <Windows.h>
 #include <direct.h>
+#pragma comment(lib, "Shell32.lib")
 #endif // _WIN32
 
 #if defined(__APPLE__)
